@@ -263,4 +263,4 @@ async def on_message(message):
         except:
             await message.channel.send("https://i.imgflip.com/3kk1hj.jpg")
 
-client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XnIjVw.y-NX_l2502KW6Jsn5Iby1Xy-i_U')
+client.run('TOKEN')
