@@ -1,0 +1,19 @@
+[
+{"Wert":"0","Effekt":"**Normaler schwerer Schaden**"},
+{"Wert":"11","Effekt":"**Kurzer Schock** Das Opfer kann durch den Schock der Verwundung eine Runde lang nicht angreifen."},
+{"Wert":"21","Effekt":"**Rumpftreffer mit Rippenbrüchen** 1W3 Rippen des Opfers brechen."},
+{"Wert":"31","Effekt":"**Rumpftreffer mit Gefahr innerer Verletzungen** Das Opfer verliert zusätzlich zum normalen Schaden 1W6 LP und AP. :drop_of_blood: : Schwere innere Verletzungen."},
+{"Wert":"36","Effekt":"**Schwere Verletzung der Wirbelsäule** :small_blue_diamond: Nur ein wuchtiger Hieb, z.B. mit einer Schlagwaffe, einer zweihändigen Hiebwaffe, einem Morgenstern, einem Kampfstab oder mit einer Pranke, richtet diese Art von kritischem Schaden an. Treffer mit anderen Waffen verursachen normalen schweren Schaden."},
+{"Wert":"41","Effekt":"**Schwere Verletzung am rechten Arm** :drop_of_blood: Mit 20% wird der Arm abgetrennt (bei einer Waffe mit Schneide) oder dauerhaft verkrüppelt. Mit Armschutz führt auch der Treffer mit einer scharfen Waffe nicht zum Abtrennen, sondern nur zur Verkrüppelung des Armes. Treffer mit Stich-, Wurf- oder Schusswaffen haben keine derart schwerwiegenden Auswirkungen."},
+{"Wert":"48","Effekt":"**Schwere Verletzung am linken Arm** :drop_of_blood: Mit 20% wird der Arm abgetrennt (bei einer Waffe mit Schneide) oder dauerhaft verkrüppelt. Mit Armschutz führt auch der Treffer mit einer scharfen Waffe nicht zum Abtrennen, sondern nur zur Verkrüppelung des Armes. Treffer mit Stich-, Wurf- oder Schusswaffen haben keine derart schwerwiegenden Auswirkungen."},
+{"Wert":"56","Effekt":"**Schwere Verletzung am rechten Bein** :drop_of_blood: Mit 20% wird das Bein abgetrennt (ohne Beinschutz bei einer Waffe mit Schneide) oder dauerhaft verkrüppelt. Treffer mit Stich-, Wurf- oder Schusswaffen haben keine derart schwerwiegenden Auswirkungen."},
+{"Wert":"65","Effekt":"**Schwere Verletzung am linken Bein** :drop_of_blood: Mit 20% wird das Bein abgetrennt (ohne Beinschutz bei einer Waffe mit Schneide) oder dauerhaft verkrüppelt. Treffer mit Stich-, Wurf- oder Schusswaffen haben keine derart schwerwiegenden Auswirkungen."},
+{"Wert":"74","Effekt":"**Schwerer Kopftreffer** :small_blue_diamond: Helmlose Opfer verlieren zusätzlich zum normalen Schaden 1W3 LP und AP."},
+{"Wert":"81","Effekt":"**Treffer im Gesicht** Das Aussehen des Getroffenen sinkt durch eine entstellende Narbe dauerhaft um ein Zehntel (mindestens aber um 1). Der Träger eines Helms mit Visier ist vor dieser Art von Schaden sicher."},
+{"Wert":"86","Effekt":"**Kopftreffer mit Hörschaden** :small_blue_diamond: Helmlose Opfer verlieren zusätzlich zum normalen Schaden 1W3 LP und AP und zusätzlich schwere Verletzung am Ohr. Helmträger sind vor dieser Art von Schaden sicher."},
+{"Wert":"90","Effekt":"**Augenverletzung** Der Träger eines Helms mit Visier ist vor dieser Art von Schaden sicher."},
+{"Wert":"94","Effekt":"**Halstreffer** :drop_of_blood: Eine spitze oder scharfe Waffe verletzt die Halsschlagader. Eine stumpfe Waffe verursacht eine schwere Halswirbelverletzung. "},
+{"Wert":"97","Effekt":"**schwere Schädelverletzung** :small_blue_diamond: Helmlose Opfer verlieren zusätzlich zum normalen Schaden 1W3 LP und AP. Aber bei helmlosen Abenteurern erhöht sich der Zusatzschaden auf 1W6 LP und AP. Fällt das Opfer ins Koma, sinkt seine Intelligenz durch Hirnschäden dauerhaft um ein Zehntel (mindestens aber um 1). "},
+{"Wert":"98","Effekt":"**Augenverlust** Bei einem Treffer mit einer scharfen oder spitzen Waffe oder einer Schusswaffe verliert das Opfer ein Auge. Der Träger eines Helms mit Visier ist vor dieser Art von Schaden sicher."},
+{"Wert":"100","Effekt":"**Tödlicher Treffer** Ein Treffer ins Herz, an der Kehle usw. tötet den Getroffenen augenblicklich."}
+]

@@ -1,0 +1,11 @@
+[
+{"Wert":"0","Effekt":"**Keine besonderen Auswirkungen.**"},
+{"Wert":"11","Effekt":"**Die Waffenhand des Angreifers wird geprellt.** In der folgenden Runde kann er mit dieser Hand nicht angreifen. Tiere verlieren einen Angriff mit Pranke, Zähnen, Stachel usw."},
+{"Wert":"31","Effekt":"**Der Angreifer wird entwaffnet.** Die Waffe fliegt vom Angreifer aus gesehen geradlinig um 1W6–1 m nach links. Bei waffenlosen Angriffen gibt es keine besonderen Auswirkungen."},
+{"Wert":"41","Effekt":"**Der Angreifer wird entwaffnet.** Die Waffe fliegt vom Angreifer aus gesehen geradlinig um 1W6–1 m nach rechts. Bei waffenlosen Angriffen gibt es keine besonderen Auswirkungen."},
+{"Wert":"51","Effekt":"**Der Angreifer wird entwaffnet.** Die Waffe fliegt vom Angreifer aus gesehen geradlinig um 1W6–1 m nach hinten. Bei waffenlosen Angriffen gibt es keine besonderen Auswirkungen."},
+{"Wert":"61","Effekt":"**Der Angreifer stürzt zu Boden.** Er ist vom Abwehrenden umgestoßen worden oder gestolpert. In einem Handgemenge treten keine besonderen Folgen auf."},
+{"Wert":"81","Effekt":"**Der Angreifer wird leicht verwundet.** Er verliert 1W6 AP."},
+{"Wert":"96","Effekt":"**Der Angreifer wird schwer verwundet.** Er erleidet 1W6 schweren Schaden."},
+{"Wert":"100","Effekt":"**Der Angreifer verliert das Bewusstsein.** Er stürzt zu Boden und kommt erst 1W6 Runden später wieder zu sich."}
+]
