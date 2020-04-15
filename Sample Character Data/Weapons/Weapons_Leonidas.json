@@ -1,0 +1,5 @@
+[
+{"Name":"Dolch", "Magisch":"y", "Fertigkeitswert":"14",  "Spezialisierung":"y", "Grundschaden":"1", "Modifikator":"-1", "Magischer Schadensbonus":"1", "Magischer Angriffsbonus":"2"},
+{"Name":"m. Dolch", "Magisch":"y", "Fertigkeitswert":"14",  "Spezialisierung":"y", "Grundschaden":"1", "Modifikator":"-1", "Magischer Schadensbonus":"0", "Magischer Angriffsbonus":"2"},
+{"Name":"Feuermal", "Magisch":"y", "Fertigkeitswert":"14",  "Spezialisierung":"y", "Grundschaden":"1", "Modifikator":"-1", "Magischer Schadensbonus":"1", "Magischer Angriffsbonus":"2"}
+]

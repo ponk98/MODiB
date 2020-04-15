@@ -1,0 +1,4 @@
+[
+{"Name":"Wasserläufer", "Magisch":"y", "Fertigkeitswert":"14",  "Spezialisierung":"y", "Grundschaden":"1", "Modifikator":"0", "Magischer Schadensbonus":"2", "Magischer Angriffsbonus":"2"},
+{"Name":"Parierdolch", "Magisch":"y", "Fertigkeitswert":"5",  "Spezialisierung":"n","Grundschaden":"1", "Modifikator":"2", "Magischer Schadensbonus":"0", "Magischer Angriffsbonus":"0"}
+]
