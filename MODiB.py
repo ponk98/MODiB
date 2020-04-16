@@ -22,6 +22,10 @@ Json = open('Game Data/Crits_Fails_Spells.json', 'r')
 Crits = json.load(Json)
 Crit_Fails_Spells = list(Crits)
 Json.close
+Json = open('Game Data/Falldamage.json', 'r')
+Faal = json.load(Json)
+Fall_Damage_Effects = list(Faal)
+Json.close
 Json = open('Game Data/Spell_List.json', 'r')
 Spells = json.load(Json)
 Spell_List = list(Spells)
@@ -263,6 +267,34 @@ async def on_message(message):
                     for i in range(int(int(height) / 2)):
                         damage += random.randint(1, 6)
                     await message.channel.send("Du fällst und nimmst **" + str(damage) + "** (" + str(int((int(height) - 1) / 2)) + "W6)" + " LP und AP Schaden")
+            if int(height) >= 6:
+                response = "Zusätzlich tritt folgender Effekt auf Grund der hohen Fallhöhe ein:"
+                roll = random.randint(1,100)
+                if roll >= 91 and roll <= 100:
+                    roll = random.randint(11,91)
+                    for i in range(len(Fall_Damage_Effects)):
+                        if int(Fall_Damage_Effects[i]["Wert"]) <= roll:
+                            Effekt_Ausgabe1 = umlaute(Fall_Damage_Effects[i]["Effekt"])
+                        else:
+                            break
+                    while True:
+                        roll = random.randint(11,91)
+                        for i in range(len(Fall_Damage_Effects)):
+                            if int(Fall_Damage_Effects[i]["Wert"]) <= roll:
+                                Effekt_Ausgabe2 = umlaute(Fall_Damage_Effects[i]["Effekt"])
+                            else:
+                                break
+                        if Effekt_Ausgabe1 != Effekt_Ausgabe2:
+                            break
+                    response = response + "\n**Zwei Effekte:**\n" + Effekt_Ausgabe1 + "\n" + Effekt_Ausgabe2
+                else:
+                    for i in range(len(Fall_Damage_Effects)):
+                        if int(Fall_Damage_Effects[i]["Wert"]) <= roll:
+                            Effekt_Ausgabe = umlaute(Fall_Damage_Effects[i]["Effekt"])
+                        else:
+                            break
+                    response = response + "\n" + Effekt_Ausgabe
+                await message.channel.send(response)
         except:
             await message.channel.send("Ungültige Fallhöhe")
 
@@ -408,10 +440,10 @@ async def on_message(message):
                 Schaden = 0
             Property_List_Cloi[14]['Wert'] = str(int(Property_List_Cloi[14]['Wert']) - Schaden)
             if int(Property_List_Cloi[14]['Wert']) * 2 < int(Property_List_Cloi[13]['Wert']):
-            	Property_List_Cloi[16]['Wert'] = str(int(int(Property_List_Cloi[15]['Wert']) / 2))
-            	Property_List_Cloi[18]['Wert'] = str(int(int(Property_List_Cloi[17]['Wert']) / 2))
+                Property_List_Cloi[16]['Wert'] = str(int(int(Property_List_Cloi[15]['Wert']) / 2))
+                Property_List_Cloi[18]['Wert'] = str(int(int(Property_List_Cloi[17]['Wert']) / 2))
             else:
-            	Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[5:]))
+                Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[5:]))
             await message.channel.send('Cloi wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cloi[14]['Wert'] + '** LP und **' + Property_List_Cloi[16]['Wert'] + '** AP.')
         elif Target_Damage.startswith('cordovan'):
             Schaden = int(Target_Damage[5:]) - int(Property_List_Cordovan[12]['Wert'])
@@ -419,10 +451,10 @@ async def on_message(message):
                 Schaden = 0
             Property_List_Cordovan[14]['Wert'] = str(int(Property_List_Cordovan[14]['Wert']) - Schaden)
             if int(Property_List_Cordovan[14]['Wert']) * 2 < int(Property_List_Cordovan[13]['Wert']):
-            	Property_List_Cordovan[16]['Wert'] = str(int(int(Property_List_Cordovan[15]['Wert']) / 2))
-            	Property_List_Cordovan[18]['Wert'] = str(int(int(Property_List_Cordovan[17]['Wert']) / 2))
+                Property_List_Cordovan[16]['Wert'] = str(int(int(Property_List_Cordovan[15]['Wert']) / 2))
+                Property_List_Cordovan[18]['Wert'] = str(int(int(Property_List_Cordovan[17]['Wert']) / 2))
             else:
-            	Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[5:]))
+                Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[5:]))
             await message.channel.send('Cordovan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cordovan[14]['Wert'] + '** LP und **' + Property_List_Cordovan[16]['Wert'] + '** AP.')
         elif Target_Damage.startswith('leonidas'):
             Schaden = int(Target_Damage[5:]) - int(Property_List_Leonidas[12]['Wert'])
@@ -430,10 +462,10 @@ async def on_message(message):
                 Schaden = 0
             Property_List_Leonidas[14]['Wert'] = str(int(Property_List_Leonidas[14]['Wert']) - Schaden)
             if int(Property_List_Leonidas[14]['Wert']) * 2 < int(Property_List_Leonidas[13]['Wert']):
-            	Property_List_Leonidas[16]['Wert'] = str(int(int(Property_List_Leonidas[15]['Wert']) / 2))
-            	Property_List_Leonidas[18]['Wert'] = str(int(int(Property_List_Leonidas[17]['Wert']) / 2))
+                Property_List_Leonidas[16]['Wert'] = str(int(int(Property_List_Leonidas[15]['Wert']) / 2))
+                Property_List_Leonidas[18]['Wert'] = str(int(int(Property_List_Leonidas[17]['Wert']) / 2))
             else:
-            	Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[5:]))
+                Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[5:]))
             await message.channel.send('Leonidas wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Leonidas[14]['Wert'] + '** LP und **' + Property_List_Leonidas[16]['Wert'] + '** AP.')
         elif Target_Damage.startswith('taravan'):
             Schaden = int(Target_Damage[5:]) - int(Property_List_Taravan[12]['Wert'])
@@ -441,10 +473,10 @@ async def on_message(message):
                 Schaden = 0
             Property_List_Cloi[14]['Wert'] = str(int(Property_List_Taravan[14]['Wert']) - Schaden)
             if int(Property_List_Taravan[14]['Wert']) * 2 < int(Property_List_Taravan[13]['Wert']):
-            	Property_List_Taravan[16]['Wert'] = str(int(int(Property_List_Taravan[15]['Wert']) / 2))
-            	Property_List_Taravan[18]['Wert'] = str(int(int(Property_List_Taravan[17]['Wert']) / 2))
+                Property_List_Taravan[16]['Wert'] = str(int(int(Property_List_Taravan[15]['Wert']) / 2))
+                Property_List_Taravan[18]['Wert'] = str(int(int(Property_List_Taravan[17]['Wert']) / 2))
             else:
-            	Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]))
+                Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]))
             await message.channel.send('Taravan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Taravan[14]['Wert'] + '** LP und **' + Property_List_Taravan[16]['Wert'] + '** AP.')
 
-client.run('TOKEN')
+client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XphXyg.RPCNdey4kk3QGVWFXi4RUSwTqwI')
