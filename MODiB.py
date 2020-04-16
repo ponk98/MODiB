@@ -479,4 +479,4 @@ async def on_message(message):
                 Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]))
             await message.channel.send('Taravan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Taravan[14]['Wert'] + '** LP und **' + Property_List_Taravan[16]['Wert'] + '** AP.')
 
-client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XphXyg.RPCNdey4kk3QGVWFXi4RUSwTqwI')
+client.run('TOKEN')
