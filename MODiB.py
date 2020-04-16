@@ -2,95 +2,95 @@ import os
 import discord, random, json
 
 #Innitialising game data.
-Json = open('Crits_Fails_Attack.json', 'r')
+Json = open('Game Data/Crits_Fails_Attack.json', 'r')
 Crits = json.load(Json)
 Crit_Fails_Attack = list(Crits)
 Json.close
-Json = open('Crits_Success_Attack.json', 'r')
+Json = open('Game Data/Crits_Success_Attack.json', 'r')
 Crits = json.load(Json)
 Crit_Success_Attack = list(Crits)
 Json.close
-Json = open('Crits_Fails_Defense.json', 'r')
+Json = open('Game Data/Crits_Fails_Defense.json', 'r')
 Crits = json.load(Json)
 Crit_Fails_Defense = list(Crits)
 Json.close
-Json = open('Crits_Success_Defense.json', 'r')
+Json = open('Game Data/Crits_Success_Defense.json', 'r')
 Crits = json.load(Json)
 Crit_Success_Defense = list(Crits)
 Json.close
-Json = open('Crits_Fails_Spells.json', 'r')
+Json = open('Game Data/Crits_Fails_Spells.json', 'r')
 Crits = json.load(Json)
 Crit_Fails_Spells = list(Crits)
 Json.close
-Json = open('Spell_List.json', 'r')
+Json = open('Game Data/Spell_List.json', 'r')
 Spells = json.load(Json)
 Spell_List = list(Spells)
 Json.close
 
 #Innitialising properties of all characters.
-Json = open('Properties_Taravan.json', 'r')
+Json = open('Sample Character Data/Properties/Properties_Taravan.json', 'r')
 Properties = json.load(Json)
 Property_List_Taravan = list(Properties)
 Json.close
-Json = open('Properties_Cloi.json', 'r')
+Json = open('Sample Character Data/Properties/Properties_Cloi.json', 'r')
 Properties = json.load(Json)
 Property_List_Cloi = list(Properties)
 Json.close
-Json = open('Properties_Cordovan.json', 'r')
+Json = open('Sample Character Data/Properties/Properties_Cordovan.json', 'r')
 Properties = json.load(Json)
 Property_List_Cordovan = list(Properties)
 Json.close
-Json = open('Properties_Leonidas.json', 'r')
+Json = open('Sample Character Data/Properties/Properties_Leonidas.json', 'r')
 Properties = json.load(Json)
 Property_List_Leonidas = list(Properties)
 Json.close
 
 #Innitialising abilities of all characters.
-Json = open('Abilities_Cloi.json', 'r')
+Json = open('Sample Character Data/Abilities/Abilities_Cloi.json', 'r')
 Abilities = json.load(Json)
 Ability_List_Cloi = list(Abilities)
 Json.close
-Json = open('Abilities_Cordovan.json', 'r')
+Json = open('Sample Character Data/Abilities/Abilities_Cordovan.json', 'r')
 Abilities = json.load(Json)
 Ability_List_Cordovan = list(Abilities)
 Json.close
-Json = open('Abilities_Leonidas.json', 'r')
+Json = open('Sample Character Data/Abilities/Abilities_Leonidas.json', 'r')
 Abilities = json.load(Json)
 Ability_List_Leonidas = list(Abilities)
 Json.close
-Json = open('Abilities_Taravan.json', 'r')
+Json = open('Sample Character Data/Abilities/Abilities_Taravan.json', 'r')
 Abilities = json.load(Json)
 Ability_List_Taravan = list(Abilities)
 Json.close
 
 #Innitialising spells of all caster characters.
-Json = open('Spells_Cloi.json', 'r')
+Json = open('Sample Character Data/Spells/Spells_Cloi.json', 'r')
 Spells = json.load(Json)
 Spell_List_Cloi = list(Spells)
 Json.close
-Json = open('Spells_Cordovan.json', 'r')
+Json = open('Sample Character Data/Spells/Spells_Cordovan.json', 'r')
 Spells = json.load(Json)
 Spell_List_Cordovan = list(Spells)
 Json.close
-Json = open('Spells_Taravan.json', 'r')
+Json = open('Sample Character Data/Spells/Spells_Taravan.json', 'r')
 Spells = json.load(Json)
 Spell_List_Taravan = list(Spells)
 Json.close
 
 #Innitialising weapons of all characters.
-Json = open('Weapons_Cloi.json', 'r')
+Json = open('Sample Character Data/Weapons/Weapons_Cloi.json', 'r')
 Weapons = json.load(Json)
 Weapon_List_Cloi = list(Weapons)
 Json.close
-Json = open('Weapons_Cordovan.json', 'r')
+Json = open('Sample Character Data/Weapons/Weapons_Cordovan.json', 'r')
 Weapons = json.load(Json)
 Weapon_List_Cordovan = list(Weapons)
 Json.close
-Json = open('Weapons_Leonidas.json', 'r')
+Json = open('Sample Character Data/Weapons/Weapons_Leonidas.json', 'r')
 Weapons = json.load(Json)
 Weapon_List_Leonidas = list(Weapons)
 Json.close
-Json = open('Weapons_Taravan.json', 'r')
+Json = open('Sample Character Data/Weapons/Weapons_Taravan.json', 'r')
 Weapons = json.load(Json)
 Weapon_List_Taravan = list(Weapons)
 Json.close
@@ -141,7 +141,7 @@ async def on_message(message):
         Current_Property_Set = Property_List_Cloi
         Current_Spell_List = Spell_List_Cloi
         DM_Status = False
-    if str(message.author) == "Aelron#6030" or str(message.author) == "Ponk#0213":
+    if str(message.author) == "Aelron#6030":
         Current_Attack_Set = Weapon_List_Cordovan
         Current_Ability_Set = Ability_List_Cordovan
         Current_Property_Set = Property_List_Cordovan
@@ -160,7 +160,7 @@ async def on_message(message):
         Current_Spell_List = Spell_List_Taravan
         DM_Status = False
     if str(message.author) == 'Ponk#0213':
-    	DM_Status = True
+        DM_Status = True
 
 ###----------------------------------------------------
 #Commands for players to engage with gameplay mechanics
@@ -354,48 +354,49 @@ async def on_message(message):
             await message.channel.send("https://i.imgflip.com/3kk1hj.jpg")
 
 ###----------------------------------------------------
-#Commands for the DM to observe abd controll gameplay
+#Commands for the DM to observe and controll gameplay
 ###----------------------------------------------------
 
 #Command for requesting specific crit effects without having to do an according roll.
     elif message.content.startswith('!crit') and DM_Status:
-    	Request = message.content[6:]
-    	if Request.startswith() == 'fail attack':
-    		for i in range(len(Crit_Fails_Attack)):
+        try:
+            Request = message.content[6:]
+            if Request.startswith('fail attack'):
+                for i in range(len(Crit_Fails_Attack)):
                     if int(Crit_Fails_Attack[i]["Wert"]) <= int(Request[12:]):
                         Effekt_Ausgabe = Crit_Fails_Attack[i]["Effekt"]
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
-        elif Request.startswith() == 'success attack':
-        	for i in range(len(Crit_Success_Attack)):
+            elif Request.startswith('success attack'):
+                for i in range(len(Crit_Success_Attack)):
                     if int(Crit_Success_Attack[i]["Wert"]) <= int(Request[15:]):
                         Effekt_Ausgabe = Crit_Success_Attack[i]["Effekt"]
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
-        elif Request.startswith() == 'fail defense':
-        	for i in range(len(Crit_Fails_Defense)):
+            elif Request.startswith('fail defense'):
+                for i in range(len(Crit_Fails_Defense)):
                     if int(Crit_Fails_Defense[i]["Wert"]) <= int(Request[13:]):
                         Effekt_Ausgabe = Crit_Fails_Defense[i]["Effekt"]
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
-        elif Request.startswith() == 'success defense':
-        	for i in range(len(Crit_Success_Defense)):
+            elif Request.startswith('success defense'):
+                for i in range(len(Crit_Success_Defense)):
                     if int(Crit_Success_Defense[i]["Wert"]) <= int(Request[16:]):
                         Effekt_Ausgabe = Crit_Success_Defense[i]["Effekt"]
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
-        elif Request.startswith() == 'fail spells':
-        	for i in range(len(Crit_Fails_Spells)):
+            elif Request.startswith('fail spells'):
+                for i in range(len(Crit_Fails_Spells)):
                     if int(Crit_Fails_Spells[i]["Wert"]) <= int(Request[12:]):
                         Effekt_Ausgabe = Crit_Fails_Spells[i]["Effekt"]
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
+        except:
+            await message.channel.send('Ungültige Anfrage')
 
-
-
-client.run('TOKEN')
+client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XphD8w.cQSqLQs0isTHC_nyHGiwkpc9bpY')
