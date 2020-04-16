@@ -12,8 +12,10 @@
 {"Eigenschaft":"Resistenzbonus Körper", "Wert":"1"},
 {"Eigenschaft":"Resistenzbonus Geist", "Wert":"1"},
 {"Eigenschaft":"Rüstung", "Wert":"2"},
-{"Eigenschaft":"Maximale LP", "Wert":"2"},
-{"Eigenschaft":"Momentane LP", "Wert":"2"},
-{"Eigenschaft":"Maximale AP", "Wert":"2"},
-{"Eigenschaft":"Momentane AP", "Wert":"2"}
+{"Eigenschaft":"Maximale LP", "Wert":"17"},
+{"Eigenschaft":"Momentane LP", "Wert":"17"},
+{"Eigenschaft":"Maximale AP", "Wert":"46"},
+{"Eigenschaft":"Momentane AP", "Wert":"46"},
+{"Eigenschaft":"Maximale Bewegungsweite", "Wert":"25"},
+{"Eigenschaft":"Momentane Bewegungsweite", "Wert":"25"}
 ]

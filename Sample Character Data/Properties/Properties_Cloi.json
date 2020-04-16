@@ -8,12 +8,14 @@
 {"Eigenschaft":"Persönliche Ausstrahlung", "Wert":"75"},
 {"Eigenschaft":"Aussehen", "Wert":"98"},
 {"Eigenschaft":"Willenskraft", "Wert":"33"},
-{"Eigenschaft":"Bewegungsweite", "Wert":"26"},
+{"Eigenschaft":"Platzhalter", "Wert":"26"},
 {"Eigenschaft":"Resistenzbonus Körper", "Wert":"4"},
 {"Eigenschaft":"Resistenzbonus Geist", "Wert":"4"},
 {"Eigenschaft":"Rüstung", "Wert":"2"},
-{"Eigenschaft":"Maximale LP", "Wert":"2"},
-{"Eigenschaft":"Momentane LP", "Wert":"2"},
-{"Eigenschaft":"Maximale AP", "Wert":"2"},
-{"Eigenschaft":"Momentane AP", "Wert":"2"}
+{"Eigenschaft":"Maximale LP", "Wert":"17"},
+{"Eigenschaft":"Momentane LP", "Wert":"17"},
+{"Eigenschaft":"Maximale AP", "Wert":"41"},
+{"Eigenschaft":"Momentane AP", "Wert":"41"},
+{"Eigenschaft":"Maximale Bewegungsweite", "Wert":"26"},
+{"Eigenschaft":"Momentane Bewegungsweite", "Wert":"26"}
 ]
