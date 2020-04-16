@@ -134,27 +134,37 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-#Assigns correct weapons, abilities and stats to the current user based on Discord name of latest message author. Updated on every message.
+#Assigns correct weapons, abilities and stats aswell as dm status to the current user based on Discord name of latest message author. Updated on every message.
     if str(message.author) == "Echtgeilman92#2052":
         Current_Attack_Set = Weapon_List_Cloi
         Current_Ability_Set = Ability_List_Cloi
         Current_Property_Set = Property_List_Cloi
         Current_Spell_List = Spell_List_Cloi
+        DM_Status = False
     if str(message.author) == "Aelron#6030" or str(message.author) == "Ponk#0213":
         Current_Attack_Set = Weapon_List_Cordovan
         Current_Ability_Set = Ability_List_Cordovan
         Current_Property_Set = Property_List_Cordovan
         Current_Spell_List = Spell_List_Cordovan
+        DM_Status = False
     if str(message.author) == "JohannesDberg#9702":
         Current_Attack_Set = Weapon_List_Leonidas
         Current_Ability_Set = Ability_List_Leonidas
         Current_Property_Set = Property_List_Leonidas
         Current_Spell_List = []
+        DM_Status = False
     if str(message.author) == "Friedrich#6066":
         Current_Attack_Set = Weapon_List_Taravan
         Current_Ability_Set = Ability_List_Taravan
         Current_Property_Set = Property_List_Taravan
         Current_Spell_List = Spell_List_Taravan
+        DM_Status = False
+    if str(message.author) == 'Ponk#0213':
+    	DM_Status = True
+
+###----------------------------------------------------
+#Commands for players to engage with gameplay mechanics
+###----------------------------------------------------
 
 #Command handling standard attack commands.
     if message.content.startswith('!Angriff') or message.content.startswith('!angriff'):
@@ -342,5 +352,50 @@ async def on_message(message):
             await message.channel.send("**" + str(random.randint(1, int(Number))) + "**")
         except:
             await message.channel.send("https://i.imgflip.com/3kk1hj.jpg")
+
+###----------------------------------------------------
+#Commands for the DM to observe abd controll gameplay
+###----------------------------------------------------
+
+#Command for requesting specific crit effects without having to do an according roll.
+    elif message.content.startswith('!crit') and DM_Status:
+    	Request = message.content[6:]
+    	if Request.startswith() == 'fail attack':
+    		for i in range(len(Crit_Fails_Attack)):
+                    if int(Crit_Fails_Attack[i]["Wert"]) <= int(Request[12:]):
+                        Effekt_Ausgabe = Crit_Fails_Attack[i]["Effekt"]
+                    else:
+                        break
+                await message.channel.send(umlaute(Effekt_Ausgabe))
+        elif Request.startswith() == 'success attack':
+        	for i in range(len(Crit_Success_Attack)):
+                    if int(Crit_Success_Attack[i]["Wert"]) <= int(Request[15:]):
+                        Effekt_Ausgabe = Crit_Success_Attack[i]["Effekt"]
+                    else:
+                        break
+                await message.channel.send(umlaute(Effekt_Ausgabe))
+        elif Request.startswith() == 'fail defense':
+        	for i in range(len(Crit_Fails_Defense)):
+                    if int(Crit_Fails_Defense[i]["Wert"]) <= int(Request[13:]):
+                        Effekt_Ausgabe = Crit_Fails_Defense[i]["Effekt"]
+                    else:
+                        break
+                await message.channel.send(umlaute(Effekt_Ausgabe))
+        elif Request.startswith() == 'success defense':
+        	for i in range(len(Crit_Success_Defense)):
+                    if int(Crit_Success_Defense[i]["Wert"]) <= int(Request[16:]):
+                        Effekt_Ausgabe = Crit_Success_Defense[i]["Effekt"]
+                    else:
+                        break
+                await message.channel.send(umlaute(Effekt_Ausgabe))
+        elif Request.startswith() == 'fail spells':
+        	for i in range(len(Crit_Fails_Spells)):
+                    if int(Crit_Fails_Spells[i]["Wert"]) <= int(Request[12:]):
+                        Effekt_Ausgabe = Crit_Fails_Spells[i]["Effekt"]
+                    else:
+                        break
+                await message.channel.send(umlaute(Effekt_Ausgabe))
+
+
 
 client.run('TOKEN')
