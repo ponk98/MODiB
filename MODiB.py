@@ -394,13 +394,13 @@ async def on_message(message):
 #Commands for the DM to observe and controll gameplay
 ###----------------------------------------------------
 
-#Command for giving out information for critical damage.
+#Command for requesting information on critical injuries.
     elif message.content.startswith('!effekt'):
-    	injury = message.content[8:].lower()
-    	for i in range(len(Injury_List)):
-    		if umlaute(Injury_List[i]['Name']).lower() == injury:
-    			await message.channel.send('```' + umlaute(Injury_List[i]['Effekt']) + '```')
-    			break
+        injury = message.content[8:].lower()
+        for i in range(len(Injury_List)):
+            if umlaute(Injury_List[i]['Name']).lower() == injury:
+                await message.channel.send('```' + umlaute(Injury_List[i]['Effekt']) + '```')
+                break
 
 #Command for requesting specific crit effects without having to do an according roll.
     elif message.content.startswith('!crit') and DM_Status:
@@ -444,52 +444,94 @@ async def on_message(message):
         except:
             await message.channel.send('Ungültige Anfrage')
 
-#Command handling heavy normal damage dealt to players.
+#Command handling heavy damage dealt to players.
     elif message.content.startswith('!s. schaden') and DM_Status:
-        Target_Damage = message.content[12:].lower()
-        if Target_Damage.startswith('cloi'):
-            Schaden = int(Target_Damage[5:]) - int(Property_List_Cloi[12]['Wert'])
-            if Schaden <= 0:
-                Schaden = 0
-            Property_List_Cloi[14]['Wert'] = str(int(Property_List_Cloi[14]['Wert']) - Schaden)
-            if int(Property_List_Cloi[14]['Wert']) * 2 < int(Property_List_Cloi[13]['Wert']):
-                Property_List_Cloi[16]['Wert'] = str(int(int(Property_List_Cloi[15]['Wert']) / 2))
-                Property_List_Cloi[18]['Wert'] = str(int(int(Property_List_Cloi[17]['Wert']) / 2))
-            else:
-                Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[5:]))
-            await message.channel.send('Cloi wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cloi[14]['Wert'] + '** LP und **' + Property_List_Cloi[16]['Wert'] + '** AP.')
-        elif Target_Damage.startswith('cordovan'):
-            Schaden = int(Target_Damage[5:]) - int(Property_List_Cordovan[12]['Wert'])
-            if Schaden <= 0:
-                Schaden = 0
-            Property_List_Cordovan[14]['Wert'] = str(int(Property_List_Cordovan[14]['Wert']) - Schaden)
-            if int(Property_List_Cordovan[14]['Wert']) * 2 < int(Property_List_Cordovan[13]['Wert']):
-                Property_List_Cordovan[16]['Wert'] = str(int(int(Property_List_Cordovan[15]['Wert']) / 2))
-                Property_List_Cordovan[18]['Wert'] = str(int(int(Property_List_Cordovan[17]['Wert']) / 2))
-            else:
-                Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[5:]))
-            await message.channel.send('Cordovan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cordovan[14]['Wert'] + '** LP und **' + Property_List_Cordovan[16]['Wert'] + '** AP.')
-        elif Target_Damage.startswith('leonidas'):
-            Schaden = int(Target_Damage[5:]) - int(Property_List_Leonidas[12]['Wert'])
-            if Schaden <= 0:
-                Schaden = 0
-            Property_List_Leonidas[14]['Wert'] = str(int(Property_List_Leonidas[14]['Wert']) - Schaden)
-            if int(Property_List_Leonidas[14]['Wert']) * 2 < int(Property_List_Leonidas[13]['Wert']):
-                Property_List_Leonidas[16]['Wert'] = str(int(int(Property_List_Leonidas[15]['Wert']) / 2))
-                Property_List_Leonidas[18]['Wert'] = str(int(int(Property_List_Leonidas[17]['Wert']) / 2))
-            else:
-                Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[5:]))
-            await message.channel.send('Leonidas wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Leonidas[14]['Wert'] + '** LP und **' + Property_List_Leonidas[16]['Wert'] + '** AP.')
-        elif Target_Damage.startswith('taravan'):
-            Schaden = int(Target_Damage[5:]) - int(Property_List_Taravan[12]['Wert'])
-            if Schaden <= 0:
-                Schaden = 0
-            Property_List_Cloi[14]['Wert'] = str(int(Property_List_Taravan[14]['Wert']) - Schaden)
-            if int(Property_List_Taravan[14]['Wert']) * 2 < int(Property_List_Taravan[13]['Wert']):
-                Property_List_Taravan[16]['Wert'] = str(int(int(Property_List_Taravan[15]['Wert']) / 2))
-                Property_List_Taravan[18]['Wert'] = str(int(int(Property_List_Taravan[17]['Wert']) / 2))
-            else:
-                Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]))
-            await message.channel.send('Taravan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Taravan[14]['Wert'] + '** LP und **' + Property_List_Taravan[16]['Wert'] + '** AP.')
+        try:
+            Target_Damage = message.content[12:].lower()
+            if Target_Damage.startswith('cloi'):
+                Schaden = int(Target_Damage[5:]) - int(Property_List_Cloi[12]['Wert'])
+                if Schaden <= 0:
+                    Schaden = 0
+                Property_List_Cloi[14]['Wert'] = str(int(Property_List_Cloi[14]['Wert']) - Schaden)
+                if int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[9:]) < 0:
+                        Property_List_Cloi[16]['Wert'] = '0'
+                else:
+                        Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[9:]))
+                if int(Property_List_Cloi[14]['Wert']) * 2 < int(Property_List_Cloi[13]['Wert']) and int(Property_List_Cloi[16]['Wert']) > int(int(Property_List_Cloi[15]['Wert']) / 2):
+                    Property_List_Cloi[18]['Wert'] = str(int(int(Property_List_Cloi[17]['Wert']) / 2))
+                    Property_List_Cloi[16]['Wert'] = str(int(int(Property_List_Cloi[15]['Wert']) / 2))
+                await message.channel.send('Cloi wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cloi[14]['Wert'] + '** LP und **' + Property_List_Cloi[16]['Wert'] + '** AP.')
+            elif Target_Damage.startswith('cordovan'):
+                Schaden = int(Target_Damage[9:]) - int(Property_List_Cordovan[12]['Wert'])
+                if Schaden <= 0:
+                    Schaden = 0
+                Property_List_Cordovan[14]['Wert'] = str(int(Property_List_Cordovan[14]['Wert']) - Schaden)
+                if int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[9:]) < 0:
+                        Property_List_Cordovan[16]['Wert'] = '0'
+                else:
+                        Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[9:]))
+                if int(Property_List_Cordovan[14]['Wert']) * 2 < int(Property_List_Cordovan[13]['Wert']) and int(Property_List_Cordovan[16]['Wert']) > int(int(Property_List_Cordovan[15]['Wert']) / 2):
+                    Property_List_Cordovan[18]['Wert'] = str(int(int(Property_List_Cordovan[17]['Wert']) / 2))
+                    Property_List_Cordovan[16]['Wert'] = str(int(int(Property_List_Cordovan[15]['Wert']) / 2))
+                await message.channel.send('Cordovan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[9:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Cordovan[14]['Wert'] + '** LP und **' + Property_List_Cordovan[16]['Wert'] + '** AP.')
+            elif Target_Damage.startswith('leonidas'):
+                Schaden = int(Target_Damage[9:]) - int(Property_List_Leonidas[12]['Wert'])
+                if Schaden <= 0:
+                    Schaden = 0
+                Property_List_Leonidas[14]['Wert'] = str(int(Property_List_Leonidas[14]['Wert']) - Schaden)
+                if int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[9:]) < 0:
+                        Property_List_Leonidas[16]['Wert'] = '0'
+                else:
+                        Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[9:]))
+                if int(Property_List_Leonidas[14]['Wert']) * 2 < int(Property_List_Leonidas[13]['Wert']) and int(Property_List_Leonidas[16]['Wert']) > int(int(Property_List_Leonidas[15]['Wert']) / 2):
+                    Property_List_Leonidas[18]['Wert'] = str(int(int(Property_List_Leonidas[17]['Wert']) / 2))
+                    Property_List_Leonidas[16]['Wert'] = str(int(int(Property_List_Leonidas[15]['Wert']) / 2))
+                await message.channel.send('Leonidas wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[5:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Leonidas[14]['Wert'] + '** LP und **' + Property_List_Leonidas[16]['Wert'] + '** AP.')
+            elif Target_Damage.startswith('taravan'):
+                Schaden = int(Target_Damage[8:]) - int(Property_List_Taravan[12]['Wert'])
+                if Schaden <= 0:
+                    Schaden = 0
+                Property_List_Taravan[14]['Wert'] = str(int(Property_List_Cordovan[14]['Wert']) - Schaden)
+                if int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[9:]) < 0:
+                        Property_List_Taravan[16]['Wert'] = '0'
+                else:
+                        Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[9:]))
+                if int(Property_List_Taravan[14]['Wert']) * 2 < int(Property_List_Taravan[13]['Wert']) and int(Property_List_Taravan[16]['Wert']) > int(int(Property_List_Taravan[15]['Wert']) / 2):
+                    Property_List_Taravan[18]['Wert'] = str(int(int(Property_List_Taravan[17]['Wert']) / 2))
+                    Property_List_Taravan[16]['Wert'] = str(int(int(Property_List_Taravan[15]['Wert']) / 2))
+                await message.channel.send('Taravan wird schwer getroffen und nimmt ' + str(Schaden) + ' schweren und ' + Target_Damage[8:] + ' leichten Schaden.\nEr hat jetzt noch **' + Property_List_Taravan[14]['Wert'] + '** LP und **' + Property_List_Taravan[16]['Wert'] + '** AP.')
+        except:
+            await message.channel.send('Ungültige Schadensangabe!')
+
+#Command handling light damage dealt to players.
+    elif message.content.startswith('!l. schaden'):
+        try:
+            Target_Damage = message.content[12:].lower()
+            if Target_Damage.startswith('cloi'):
+                if int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[5:]) < 0:
+                    Property_List_Cloi[16]['Wert'] = '0'
+                else:
+                    Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - int(Target_Damage[5:]))
+                await message.channel.send('Cloi nimmt ' + str(Target_Damage[5:]) + ' leichten Schaden.\nEr hat jetzt noch **' + str(Property_List_Cloi[16]['Wert']) + '** AP.')
+            if Target_Damage.startswith('cordovan'):
+                if int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[5:]) < 0:
+                    Property_List_Cordovan[16]['Wert'] = '0'
+                else:
+                    Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - int(Target_Damage[5:]))
+                await message.channel.send('Cordovan nimmt ' + str(Target_Damage[5:]) + ' leichten Schaden.\nEr hat jetzt noch **' + str(Property_List_Cordovan[16]['Wert']) + '** AP.')
+            if Target_Damage.startswith('leonidas'):
+                if int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[5:]) < 0:
+                    Property_List_Leonidas[16]['Wert'] = '0'
+                else:
+                    Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - int(Target_Damage[5:]))
+                await message.channel.send('Leonidas nimmt ' + str(Target_Damage[5:]) + ' leichten Schaden.\nEr hat jetzt noch **' + str(Property_List_Leonidas[16]['Wert']) + '** AP.')
+            if Target_Damage.startswith('taravan'):
+                if int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]) < 0:
+                    Property_List_Taravan[16]['Wert'] = '0'
+                else:
+                    Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - int(Target_Damage[5:]))
+                await message.channel.send('Taravan nimmt ' + str(Target_Damage[5:]) + ' leichten Schaden.\nEr hat jetzt noch **' + str(Property_List_Taravan[16]['Wert']) + '** AP.')
+        except:
+            await message.channel.send('Ungültige Schadensangabe!')
 
 client.run('TOKEN')
