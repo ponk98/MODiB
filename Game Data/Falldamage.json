@@ -1,0 +1,14 @@
+[
+{"Wert":"0","Effekt":"**Kein zusätzlicher Schaden**"},
+{"Wert":"11","Effekt":"**Rippenbrüche**"},
+{"Wert":"21","Effekt":"**Schwere Verletzung am rechten Arm**"},
+{"Wert":"31","Effekt":"**Schwere Verletzung am linken Arm**"},
+{"Wert":"41","Effekt":"**Schwere Verletzung am rechten Bein**"},
+{"Wert":"51","Effekt":"**Schwere Verletzung am linken Bein**"},
+{"Wert":"61","Effekt":"**Schwere innere Verletzungen**"},
+{"Wert":"71","Effekt":"**Kopfverletzung**"},
+{"Wert":"81","Effekt":"**Verletzung der Wirbelsäule**"},
+{"Wert":"86","Effekt":"**Halswirbelverletzung**"},
+{"Wert":"91","Effekt":"**2 Verletzungen**"},
+{"Wert":"100","Effekt":"**Genickbruch und sofortiger Tod**"}
+]
