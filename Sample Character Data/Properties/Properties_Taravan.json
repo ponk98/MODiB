@@ -15,7 +15,8 @@
 {"Eigenschaft": "Maximale LP", "Wert": "15"},
 {"Eigenschaft": "Momentane LP", "Wert": "15"},
 {"Eigenschaft": "Maximale AP", "Wert": "45"},
-{"Eigenschaft": "Momentane AP", "Wert": "40"},
+{"Eigenschaft": "Momentane AP", "Wert": "35"},
 {"Eigenschaft": "Maximale Bewegungsweite", "Wert": "22"},
-{"Eigenschaft": "Momentane Bewegungsweite", "Wert": "22"}
+{"Eigenschaft": "Momentane Bewegungsweite", "Wert": "22"},
+{"Eigenschaft": "Zauberspezialisierung", "Wert": "-"}
 ]

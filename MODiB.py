@@ -285,13 +285,13 @@ async def on_message(message):
         Current_Property_Set = Property_List_Cloi
         Current_Spell_List = Spell_List_Cloi
         DM_Status = False
-    if str(message.author) == 'Aelron#6030':
+    if str(message.author) == 'Aelron#6030' or str(message.author) == 'Ponk#0213':
         Current_Attack_Set = Weapon_List_Cordovan
         Current_Ability_Set = Ability_List_Cordovan
         Current_Property_Set = Property_List_Cordovan
         Current_Spell_List = Spell_List_Cordovan
         DM_Status = False
-    if str(message.author) == 'JohannesDberg#9702' or str(message.author) == 'Ponk#0213':
+    if str(message.author) == 'JohannesDberg#9702':
         Current_Attack_Set = Weapon_List_Leonidas
         Current_Ability_Set = Ability_List_Leonidas
         Current_Property_Set = Property_List_Leonidas
@@ -383,61 +383,6 @@ async def on_message(message):
                         await message.channel.send('Treffer ' + '**' + str(Roll) + '**+' + Fencing_Value + '=' + str(Roll + int(Fencing_Value)))
                         await message.channel.send('Schaden: **' + str(Schaden) + '**' + ' (' + Current_Attack_Set[i]['Grundschaden'] + 'W6+' + str(int(Current_Attack_Set[i]['Magischer Schadensbonus']) + int(Current_Attack_Set[i]['Modifikator'])) + ')')
 
-#Command handling fall damage.
-    elif message.content.lower().startswith('!fallschaden'):
-        try:
-            height = message.content[13:]
-            if int(height) > 100:
-                await message.channel.send('Tod')
-            elif int(height) < 2:
-                await message.channel.send('Kein Fallschaden aus dieser Höhe möglich.')
-            elif int(height) == 2:
-                if random.randint(1,100) >= int(Current_Property_Set[1]['Wert']):
-                    await message.channel.send('Du fällst und nimmst **' + str(random.randint(1,6)) + '** (1W6)' + ' AP Schaden!')
-                else:
-                    await message.channel.send('Du fällst und nimmst **' + str(random.randint(1,6)) + '** (1W6)' + ' LP und AP Schaden!')
-            else:
-                if (int(height) % 2) == 1:
-                    damage = 0
-                    for i in range(int((int(height) - 1) / 2)):
-                        damage += random.randint(1, 6)
-                    await message.channel.send('Du fällst und nimmst **' + str(damage + 2) + '** (' + str(int((int(height) - 1) / 2)) + 'W6+2)' + ' LP und AP Schaden')
-                else:
-                    damage = 0
-                    for i in range(int(int(height) / 2)):
-                        damage += random.randint(1, 6)
-                    await message.channel.send('Du fällst und nimmst **' + str(damage) + '** (' + str(int((int(height) - 1) / 2)) + 'W6)' + ' LP und AP Schaden')
-            if int(height) >= 6:
-                response = 'Zusätzlich tritt folgender Effekt auf Grund der hohen Fallhöhe ein:'
-                roll = random.randint(1,100)
-                if roll >= 91 and roll <= 100:
-                    roll = random.randint(11,91)
-                    for i in range(len(Fall_Damage_Effects)):
-                        if int(Fall_Damage_Effects[i]['Wert']) <= roll:
-                            Effekt_Ausgabe1 = umlaute(Fall_Damage_Effects[i]['Effekt'])
-                        else:
-                            break
-                    while True:
-                        roll = random.randint(11,91)
-                        for i in range(len(Fall_Damage_Effects)):
-                            if int(Fall_Damage_Effects[i]['Wert']) <= roll:
-                                Effekt_Ausgabe2 = umlaute(Fall_Damage_Effects[i]['Effekt'])
-                            else:
-                                break
-                        if Effekt_Ausgabe1 != Effekt_Ausgabe2:
-                            break
-                    response = response + '\n**Zwei Effekte:**\n' + Effekt_Ausgabe1 + '\n' + Effekt_Ausgabe2
-                else:
-                    for i in range(len(Fall_Damage_Effects)):
-                        if int(Fall_Damage_Effects[i]['Wert']) <= roll:
-                            Effekt_Ausgabe = umlaute(Fall_Damage_Effects[i]['Effekt'])
-                        else:
-                            break
-                    response = response + '\n' + Effekt_Ausgabe
-                await message.channel.send(response)
-        except:
-            await message.channel.send('Ungültige Fallhöhe')
-
 #Command handling skill checks.
     elif message.content.lower().startswith('!test'):
         Ability = message.content[6:].lower()
@@ -461,18 +406,6 @@ async def on_message(message):
                     else:
                         break
                 await message.channel.send(umlaute(Effekt_Ausgabe))
-        elif Ability == 'zaubern' and Roll == 1 or Ability == 'zaubern' and Roll == 20:
-            if Roll == 1:
-                Effekt = random.randint(1,100)
-                await message.channel.send('**Kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt))
-                for i in range(len(Crit_Fails_Spells)):
-                    if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
-                        Effekt_Ausgabe = Crit_Fails_Spells[i]['Effekt']
-                    else:
-                        break
-                await message.channel.send(umlaute(Effekt_Ausgabe))
-            if Roll == 20:
-                await message.channel.send('**Kritischer Erfolg!**')
         else:
             for i in range(len(Current_Ability_Set)):
                 if Ability == umlaute(Current_Ability_Set[i]['Ability'].lower()):
@@ -482,6 +415,120 @@ async def on_message(message):
                         await message.channel.send('Kritischer Misserfolg: ' + '**' + str(Roll) + '**' + '+' + Current_Ability_Set[i]['Wert'] + '=' + str(Roll+int(Current_Ability_Set[i]['Wert'])))
                     else:
                         await message.channel.send('**' + str(Roll) + '**' + '+' + Current_Ability_Set[i]['Wert'] + '=' + str(Roll+int(Current_Ability_Set[i]['Wert'])))
+
+#Command handling spell checks.
+    elif message.content.lower().startswith('!zaubern'):
+        try:
+            zauber = message.content[9:].lower()
+            zauber_bekannt = False
+            for i in range(len(Current_Spell_List)):
+                if zauber == umlaute(Current_Spell_List[i]['Name'].lower()):
+                    zauber_bekannt = True
+                    break 
+            if zauber_bekannt:
+                for i in range(len(Spell_List)):
+                    if zauber == umlaute(Spell_List[i]['Name'].lower()):
+                        index = i
+                        break
+                Roll = random.randint(1,20)
+                if Roll == 1:
+                    Effekt = random.randint(1,100)
+                    output = '**Kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
+                    for i in range(len(Crit_Fails_Spells)):
+                        if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
+                            Effekt_Ausgabe = Crit_Fails_Spells[i]['Effekt']
+                        else:
+                            break
+                    await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
+                elif Roll == 20:
+                    await message.channel.send('**Kritischer Erfolg!**')
+                else:
+                    bonus = 0
+                    if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
+                        bonus += 2
+                    if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
+                        await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+                    else:
+                        await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+            else:
+                await message.channel.send('Der Zauber ist entweder nicht gelernt oder existiert nicht!')
+        except:
+            await message.channel.send('Etwas ist schief gelaufen')
+# #Command handling spell checks.
+#     elif message.content.lower().startswith('!zaubern'):
+#         try:
+#             zauber_anzahl = message.content[9:].lower()
+#             anzahl = [int(s) for s in zauber_anzahl.split() if s.isdigit()]
+#             if len(anzahl) > 1:
+#                 await message.channel.send('Zu viele angegebene Werte!')
+#             elif len(anzahl) == 1:
+#                 zauber = zauber_anzahl.replace(" ", "").replace(str(anzahl[0]), "")
+#                 zauber_bekannt = False
+#                 for i in range(len(Current_Spell_List)):
+#                     if zauber == Current_Spell_List[i]['Name'].replace(" ", ""):
+#                         zauber_bekannt = True
+#                         break 
+#                 if zauber_bekannt:
+#                     for i in range(len(Spell_List)):
+#                         if zauber == Spell_List[i]['Name'].replace(" ", ""):
+#                             index = i
+#                             break
+#                     if 'je' in Spell_List[i]['AP-Verbrauch']:
+#                         AP_Verbrauch = int(Spell_List[i]['AP-Verbrauch'][0]) * anzahl[0]
+#                         Roll = random.randint(1,20)
+#                         if Roll == 1:
+#                             Effekt = random.randint(1,100)
+#                             output = '**Kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
+#                             for i in range(len(Crit_Fails_Spells)):
+#                                 if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
+#                                     Effekt_Ausgabe = Crit_Fails_Spells[i]['Effekt']
+#                                 else:
+#                                     break
+#                             await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
+#                         elif Roll == 20:
+#                             await message.channel.send('**Kritischer Erfolg!**')
+#                         else:
+#                             bonus = 0
+#                             if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
+#                                 bonus += 2
+#                             if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
+#                                 await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+#                             else:
+#                                 await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+#                         if str(message.author) == 'Echtgeilman92#2052':
+#                             Property_List_Cloi[]
+#                         if str(message.author) == 'Aelron#6030':
+#                             Current_Attack_Set = Weapon_List_Cordovan
+#                             Current_Ability_Set = Ability_List_Cordovan
+#                             Current_Property_Set = Property_List_Cordovan
+#                             Current_Spell_List = Spell_List_Cordovan
+#                             DM_Status = False
+#                         if str(message.author) == 'JohannesDberg#9702' or str(message.author) == 'Ponk#0213':
+#                             Current_Attack_Set = Weapon_List_Leonidas
+#                             Current_Ability_Set = Ability_List_Leonidas
+#                             Current_Property_Set = Property_List_Leonidas
+#                             Current_Spell_List = []
+#                             DM_Status = False
+#                         if str(message.author) == 'Friedrich#6066':
+#                             Current_Attack_Set = Weapon_List_Taravan
+#                             Current_Ability_Set = Ability_List_Taravan
+#                             Current_Property_Set = Property_List_Taravan
+#                             Current_Spell_List = Spell_List_Taravan
+#                             DM_Status = False
+#                     else:
+#                         await message.channel.send('Dieser Zauber hat keine Variablen Zauberkosten!')
+
+                    
+#             elif len(anzahl) == 0:
+#                 zauber = zauber_anzahl.replace(" ", "")
+
+
+
+
+#             else:
+#                 await message.channel.send('Dieser Zauber ist entweder nicht gelernt oder existiert nicht!')
+#         except:
+#             await message.channel.send('Ein unerwarteter Fehler ist aufgetreten')
 
 #Command handling direct damage dealt to any player. (Players can only inflict damage to self, while DM can inflict damage to any player.)
     elif message.content.startswith('!d. schaden'):
@@ -632,6 +679,61 @@ async def on_message(message):
         except:
             await message.channel.send('Ungültige Schadensangabe!')
 
+#Command handling fall damage calculations.
+    elif message.content.lower().startswith('!fallschaden'):
+        try:
+            height = message.content[13:]
+            if int(height) > 100:
+                await message.channel.send('Tod')
+            elif int(height) < 2:
+                await message.channel.send('Kein Fallschaden aus dieser Höhe möglich.')
+            elif int(height) == 2:
+                if random.randint(1,100) >= int(Current_Property_Set[1]['Wert']):
+                    await message.channel.send('Du fällst und nimmst **' + str(random.randint(1,6)) + '** (1W6)' + ' AP Schaden!')
+                else:
+                    await message.channel.send('Du fällst und nimmst **' + str(random.randint(1,6)) + '** (1W6)' + ' LP und AP Schaden!')
+            else:
+                if (int(height) % 2) == 1:
+                    damage = 0
+                    for i in range(int((int(height) - 1) / 2)):
+                        damage += random.randint(1, 6)
+                    await message.channel.send('Du fällst und nimmst **' + str(damage + 2) + '** (' + str(int((int(height) - 1) / 2)) + 'W6+2)' + ' LP und AP Schaden')
+                else:
+                    damage = 0
+                    for i in range(int(int(height) / 2)):
+                        damage += random.randint(1, 6)
+                    await message.channel.send('Du fällst und nimmst **' + str(damage) + '** (' + str(int((int(height) - 1) / 2)) + 'W6)' + ' LP und AP Schaden')
+            if int(height) >= 6:
+                response = 'Zusätzlich tritt folgender Effekt auf Grund der hohen Fallhöhe ein:'
+                roll = random.randint(1,100)
+                if roll >= 91 and roll <= 100:
+                    roll = random.randint(11,91)
+                    for i in range(len(Fall_Damage_Effects)):
+                        if int(Fall_Damage_Effects[i]['Wert']) <= roll:
+                            Effekt_Ausgabe1 = umlaute(Fall_Damage_Effects[i]['Effekt'])
+                        else:
+                            break
+                    while True:
+                        roll = random.randint(11,91)
+                        for i in range(len(Fall_Damage_Effects)):
+                            if int(Fall_Damage_Effects[i]['Wert']) <= roll:
+                                Effekt_Ausgabe2 = umlaute(Fall_Damage_Effects[i]['Effekt'])
+                            else:
+                                break
+                        if Effekt_Ausgabe1 != Effekt_Ausgabe2:
+                            break
+                    response = response + '\n**Zwei Effekte:**\n' + Effekt_Ausgabe1 + '\n' + Effekt_Ausgabe2
+                else:
+                    for i in range(len(Fall_Damage_Effects)):
+                        if int(Fall_Damage_Effects[i]['Wert']) <= roll:
+                            Effekt_Ausgabe = umlaute(Fall_Damage_Effects[i]['Effekt'])
+                        else:
+                            break
+                    response = response + '\n' + Effekt_Ausgabe
+                await message.channel.send(response)
+        except:
+            await message.channel.send('Ungültige Fallhöhe')
+
 #Command for changing armor class.
     elif message.content.lower().startswith('!rüstung'):
         try:
@@ -668,7 +770,7 @@ async def on_message(message):
         output = '**Deine Stats:**\n```LP:' + Current_Property_Set[14]['Wert'] + '/' + Current_Property_Set[13]['Wert']
         output = output + '   AP:' + Current_Property_Set[16]['Wert'] + '/' + Current_Property_Set[15]['Wert'] + '   Bewegungsweite:' + Current_Property_Set[18]['Wert'] + '/' + Current_Property_Set[17]['Wert']
         output = output + '   Rüstung:' + Current_Property_Set[12]['Wert'] + '\n' + 'Stärke:' + Current_Property_Set[4]['Wert'] + ' Geschicklichkeit:' + Current_Property_Set[0]['Wert'] 
-        output = output + ' Gewandheit:' + Current_Property_Set[9]['Wert'] + ' Konstitution:' + Current_Property_Set[2]['Wert'] + '\nZaubertalent:' + Current_Property_Set[5]['Wert']
+        output = output + ' Gewandheit:' + Current_Property_Set[1]['Wert'] + ' Konstitution:' + Current_Property_Set[2]['Wert'] + ' Intelligenz:' + Current_Property_Set[3]['Wert'] + '\nZaubertalent:' + Current_Property_Set[5]['Wert']
         output = output + ' Aussehen:' + Current_Property_Set[7]['Wert'] + ' Persönliche Ausstrahlung:' + Current_Property_Set[6]['Wert'] + ' Willenskraft:' + Current_Property_Set[8]['Wert'] + '```'
         await message.channel.send(output)
 
@@ -803,7 +905,7 @@ async def on_message(message):
                         New_LP = Property_List_Cloi[13]['Wert']
                     Property_List_Cloi[14]['Wert'] = str(New_LP)
                     if int(Property_List_Cloi[14]['Wert']) * 2 >= int(Property_List_Cloi[13]['Wert']):
-	                    Property_List_Cloi[18]['Wert'] = Property_List_Cloi[17]['Wert']
+                        Property_List_Cloi[18]['Wert'] = Property_List_Cloi[17]['Wert']
                     New_AP = int(Property_List_Cloi[16]['Wert']) + Heal_Amount
                     if New_AP > int(Property_List_Cloi[15]['Wert']):
                         New_AP = Property_List_Cloi[15]['Wert']
@@ -827,7 +929,7 @@ async def on_message(message):
                         New_LP = Property_List_Cordovan[13]['Wert']
                     Property_List_Cordovan[14]['Wert'] = str(New_LP)
                     if int(Property_List_Cordovan[14]['Wert']) * 2 >= int(Property_List_Cordovan[13]['Wert']):
-	                    Property_List_Cordovan[18]['Wert'] = Property_List_Cordovan[17]['Wert']
+                        Property_List_Cordovan[18]['Wert'] = Property_List_Cordovan[17]['Wert']
                     New_AP = int(Property_List_Cordovan[16]['Wert']) + Heal_Amount
                     if New_AP > int(Property_List_Cordovan[15]['Wert']):
                         New_AP = Property_List_Cordovan[15]['Wert']
@@ -851,7 +953,7 @@ async def on_message(message):
                         New_LP = Property_List_Leonidas[13]['Wert']
                     Property_List_Leonidas[14]['Wert'] = str(New_LP)
                     if int(Property_List_Leonidas[14]['Wert']) * 2 >= int(Property_List_Leonidas[13]['Wert']):
-	                    Property_List_Leonidas[18]['Wert'] = Property_List_Leonidas[17]['Wert']
+                        Property_List_Leonidas[18]['Wert'] = Property_List_Leonidas[17]['Wert']
                     New_AP = int(Property_List_Leonidas[16]['Wert']) + Heal_Amount
                     if New_AP > int(Property_List_Leonidas[15]['Wert']):
                         New_AP = Property_List_Leonidas[15]['Wert']
@@ -875,7 +977,7 @@ async def on_message(message):
                         New_LP = Property_List_Taravan[13]['Wert']
                     Property_List_Taravan[14]['Wert'] = str(New_LP)
                     if int(Property_List_Taravan[14]['Wert']) * 2 >= int(Property_List_Taravan[13]['Wert']):
-	                    Property_List_Taravan[18]['Wert'] = Property_List_Taravan[17]['Wert']
+                        Property_List_Taravan[18]['Wert'] = Property_List_Taravan[17]['Wert']
                     New_AP = int(Property_List_Taravan[16]['Wert']) + Heal_Amount
                     if New_AP > int(Property_List_Taravan[15]['Wert']):
                         New_AP = Property_List_Taravan[15]['Wert']
@@ -889,33 +991,32 @@ async def on_message(message):
 #Command for giving every player 1LP after midnight.
     elif message.content.lower() == '!mitternacht' and DM_Status:
         try:
-        	New_LP = int(Property_List_Cloi[14]['Wert']) + 1
-	            if New_LP > int(Property_List_Cloi[13]['Wert']):
-	                New_LP = Property_List_Cloi[13]['Wert']
-	            Property_List_Cloi[14]['Wert'] = str(New_LP)
-	            if int(Property_List_Cloi[14]['Wert']) * 2 >= int(Property_List_Cloi[13]['Wert']):
-	                Property_List_Cloi[18]['Wert'] = Property_List_Cloi[17]['Wert']
-	        New_LP = int(Property_List_Cordovan[14]['Wert']) + 1
-	            if New_LP > int(Property_List_Cordovan[13]['Wert']):
-	                New_LP = Property_List_Cordovan[13]['Wert']
-	            Property_List_Cordovan[14]['Wert'] = str(New_LP)
-	            if int(Property_List_Cordovan[14]['Wert']) * 2 >= int(Property_List_Cordovan[13]['Wert']):
-	                Property_List_Cordovan[18]['Wert'] = Property_List_Cordovan[17]['Wert']
-	        New_LP = int(Property_List_Leonidas[14]['Wert']) + 1
-	            if New_LP > int(Property_List_Leonidas[13]['Wert']):
-	                New_LP = Property_List_Leonidas[13]['Wert']
-	            Property_List_Leonidas[14]['Wert'] = str(New_LP)
-	            if int(Property_List_Leonidas[14]['Wert']) * 2 >= int(Property_List_Leonidas[13]['Wert']):
-	                Property_List_Leonidas[18]['Wert'] = Property_List_Leonidas[17]['Wert']
-	            New_AP = int(Property_List_Leonidas[16]['Wert']) + Heal_Amount
-	        New_LP = int(Property_List_Taravan[14]['Wert']) + 1
-	            if New_LP > int(Property_List_Taravan[13]['Wert']):
-	                New_LP = Property_List_Taravan[13]['Wert']
-	            Property_List_Taravan[14]['Wert'] = str(New_LP)
-	            if int(Property_List_Taravan[14]['Wert']) * 2 >= int(Property_List_Taravan[13]['Wert']):
-	                Property_List_Taravan[18]['Wert'] = Property_List_Taravan[17]['Wert']
-	        await message.channel.send('Alle erhalten einen LP wieder.')
-	    except:
-	    	await message.channel.send('Die Sonne will einfach nicht untergehen...')
+            New_LP = int(Property_List_Cloi[14]['Wert']) + 1
+            if New_LP > int(Property_List_Cloi[13]['Wert']):
+                New_LP = Property_List_Cloi[13]['Wert']
+            Property_List_Cloi[14]['Wert'] = str(New_LP)
+            if int(Property_List_Cloi[14]['Wert']) * 2 >= int(Property_List_Cloi[13]['Wert']):
+                Property_List_Cloi[18]['Wert'] = Property_List_Cloi[17]['Wert']
+            New_LP = int(Property_List_Cordovan[14]['Wert']) + 1
+            if New_LP > int(Property_List_Cordovan[13]['Wert']):
+                New_LP = Property_List_Cordovan[13]['Wert']
+            Property_List_Cordovan[14]['Wert'] = str(New_LP)
+            if int(Property_List_Cordovan[14]['Wert']) * 2 >= int(Property_List_Cordovan[13]['Wert']):
+                Property_List_Cordovan[18]['Wert'] = Property_List_Cordovan[17]['Wert']
+            New_LP = int(Property_List_Leonidas[14]['Wert']) + 1
+            if New_LP > int(Property_List_Leonidas[13]['Wert']):
+                New_LP = Property_List_Leonidas[13]['Wert']
+            Property_List_Leonidas[14]['Wert'] = str(New_LP)
+            if int(Property_List_Leonidas[14]['Wert']) * 2 >= int(Property_List_Leonidas[13]['Wert']):
+                Property_List_Leonidas[18]['Wert'] = Property_List_Leonidas[17]['Wert']
+            New_LP = int(Property_List_Taravan[14]['Wert']) + 1
+            if New_LP > int(Property_List_Taravan[13]['Wert']):
+                New_LP = Property_List_Taravan[13]['Wert']
+            Property_List_Taravan[14]['Wert'] = str(New_LP)
+            if int(Property_List_Taravan[14]['Wert']) * 2 >= int(Property_List_Taravan[13]['Wert']):
+                Property_List_Taravan[18]['Wert'] = Property_List_Taravan[17]['Wert']
+            await message.channel.send('Alle erhalten einen LP wieder.')
+        except:
+            await message.channel.send('Die Sonne will einfach nicht untergehen...')
 
-client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XpjH5A.6dOgPxlzJDy1vkMTGSggQWc5P7A')
+client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XqXhNQ.u_UjhZ3tp8ukgvlHbxQkGVBTYxY')
