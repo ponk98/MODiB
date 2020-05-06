@@ -1,4 +1,5 @@
 import os
+import youtube_dl
 import discord, random, json
 
 #Function that calculates the damage bonus of the currently loaded character
@@ -418,118 +419,156 @@ async def on_message(message):
 
 #Command handling spell checks.
     elif message.content.lower().startswith('!zaubern'):
-        try:
-            zauber = message.content[9:].lower()
-            zauber_bekannt = False
+        #try:
+        spell_amount = message.content[9:].lower()
+        amounts = [int(d) for d in spell_amount.split() if d.isdigit()]
+        if len(amounts) > 1:
+            await message.channel.send('Zu viele Parameter angegeben!')
+            AP_Kosten = 0
+        elif len(amounts) == 0:
+            spell = spell_amount
+            spell_known = False
             for i in range(len(Current_Spell_List)):
-                if zauber == umlaute(Current_Spell_List[i]['Name'].lower()):
-                    zauber_bekannt = True
-                    break 
-            if zauber_bekannt:
+                if spell == umlaute(Current_Spell_List[i]['Name']).lower():
+                    spell_known = True
+            if not spell_known:
+                await message.channel.send('Der Zauber ist entweder nicht gelernt oder existiert nicht!')
+                AP_Kosten = 0
+            elif spell_known:
                 for i in range(len(Spell_List)):
-                    if zauber == umlaute(Spell_List[i]['Name'].lower()):
+                    if spell == umlaute(Spell_List[i]['Name']).lower():
                         index = i
                         break
-                Roll = random.randint(1,20)
-                if Roll == 1:
-                    Effekt = random.randint(1,100)
-                    output = '**Kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
-                    for i in range(len(Crit_Fails_Spells)):
-                        if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
-                            Effekt_Ausgabe = Crit_Fails_Spells[i]['Effekt']
-                        else:
-                            break
-                    await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
-                elif Roll == 20:
-                    await message.channel.send('**Kritischer Erfolg!**')
+                cost = Spell_List[i]['AP-Verbrauch']
+                if "je" in cost:
+                    await message.channel.send('Der Zauber hat variable AP Kosten. Der Zauber kostet ' + Spell_List[index]['AP-Verbrauch'] + '. Wiederhole den Befehl und füge die gewünschte Anzahl hinten an.')
+                    AP_Kosten = 0
                 else:
-                    bonus = 0
-                    if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
-                        bonus += 2
-                    if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
-                        await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+                    AP_Kosten = int(Spell_List[index]['AP-Verbrauch'])
+                    if AP_Kosten > int(Current_Property_Set[16]['Wert']):
+                        await message.channel.send('Du hast nicht genügend AP um diesen Zauber zu wirken!')
+                        AP_Kosten = 0
                     else:
-                        await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
-            else:
+                        Roll = random.randint(1,20)
+                        if Roll == 1:
+                            Effekt = random.randint(1,100)
+                            output = '**Der Zauber ist ein kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
+                            for i in range(len(Crit_Fails_Spells)):
+                                if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
+                                    Effekt_Ausgabe = umlaute(Crit_Fails_Spells[i]['Effekt'])
+                                else:
+                                    break
+                            if Effekt > 10 and Effekt < 31:
+                                x = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('1W6', ('**' + str(x) + '** (1W6)'))
+                            elif Effekt > 30 and Effekt < 51:
+                                AP_Kosten = AP_Kosten*2
+                            elif Effekt > 70 and Effekt < 81:
+                                x = random.randint(1, 6)
+                                y = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('1W6 AP', ('**' + str(x) + '** (1W6) AP'))
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('kann 1W6', ('kann **' + str(y) + '** (1W6)'))
+                                AP_Kosten += x
+                            elif Effekt > 90 and Effekt < 96:
+                                x = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('1W6', ('**' + str(x) + '** (1W6)'))
+                            await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
+                        elif Roll == 20:
+                            await message.channel.send('**Der Zauber ist ein kritischer Erfolg!**')
+                        else:
+                            bonus = 0
+                            if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
+                                bonus += 2
+                            if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
+                                await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+                            else:
+                                await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+        elif len(amounts) == 1:
+            spell = spell_amount.replace(str(amounts[0]), '').replace(' ', '')
+            spell_known = False
+            for i in range(len(Current_Spell_List)):
+                if spell == umlaute(Current_Spell_List[i]['Name']).lower().replace(' ', ''):
+                    spell_known = True
+            if not spell_known:
                 await message.channel.send('Der Zauber ist entweder nicht gelernt oder existiert nicht!')
-        except:
-            await message.channel.send('Etwas ist schief gelaufen')
-# #Command handling spell checks.
-#     elif message.content.lower().startswith('!zaubern'):
-#         try:
-#             zauber_anzahl = message.content[9:].lower()
-#             anzahl = [int(s) for s in zauber_anzahl.split() if s.isdigit()]
-#             if len(anzahl) > 1:
-#                 await message.channel.send('Zu viele angegebene Werte!')
-#             elif len(anzahl) == 1:
-#                 zauber = zauber_anzahl.replace(" ", "").replace(str(anzahl[0]), "")
-#                 zauber_bekannt = False
-#                 for i in range(len(Current_Spell_List)):
-#                     if zauber == Current_Spell_List[i]['Name'].replace(" ", ""):
-#                         zauber_bekannt = True
-#                         break 
-#                 if zauber_bekannt:
-#                     for i in range(len(Spell_List)):
-#                         if zauber == Spell_List[i]['Name'].replace(" ", ""):
-#                             index = i
-#                             break
-#                     if 'je' in Spell_List[i]['AP-Verbrauch']:
-#                         AP_Verbrauch = int(Spell_List[i]['AP-Verbrauch'][0]) * anzahl[0]
-#                         Roll = random.randint(1,20)
-#                         if Roll == 1:
-#                             Effekt = random.randint(1,100)
-#                             output = '**Kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
-#                             for i in range(len(Crit_Fails_Spells)):
-#                                 if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
-#                                     Effekt_Ausgabe = Crit_Fails_Spells[i]['Effekt']
-#                                 else:
-#                                     break
-#                             await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
-#                         elif Roll == 20:
-#                             await message.channel.send('**Kritischer Erfolg!**')
-#                         else:
-#                             bonus = 0
-#                             if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
-#                                 bonus += 2
-#                             if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
-#                                 await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
-#                             else:
-#                                 await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
-#                         if str(message.author) == 'Echtgeilman92#2052':
-#                             Property_List_Cloi[]
-#                         if str(message.author) == 'Aelron#6030':
-#                             Current_Attack_Set = Weapon_List_Cordovan
-#                             Current_Ability_Set = Ability_List_Cordovan
-#                             Current_Property_Set = Property_List_Cordovan
-#                             Current_Spell_List = Spell_List_Cordovan
-#                             DM_Status = False
-#                         if str(message.author) == 'JohannesDberg#9702' or str(message.author) == 'Ponk#0213':
-#                             Current_Attack_Set = Weapon_List_Leonidas
-#                             Current_Ability_Set = Ability_List_Leonidas
-#                             Current_Property_Set = Property_List_Leonidas
-#                             Current_Spell_List = []
-#                             DM_Status = False
-#                         if str(message.author) == 'Friedrich#6066':
-#                             Current_Attack_Set = Weapon_List_Taravan
-#                             Current_Ability_Set = Ability_List_Taravan
-#                             Current_Property_Set = Property_List_Taravan
-#                             Current_Spell_List = Spell_List_Taravan
-#                             DM_Status = False
-#                     else:
-#                         await message.channel.send('Dieser Zauber hat keine Variablen Zauberkosten!')
-
-                    
-#             elif len(anzahl) == 0:
-#                 zauber = zauber_anzahl.replace(" ", "")
-
-
-
-
-#             else:
-#                 await message.channel.send('Dieser Zauber ist entweder nicht gelernt oder existiert nicht!')
-#         except:
-#             await message.channel.send('Ein unerwarteter Fehler ist aufgetreten')
-
+                AP_Kosten = 0
+            elif spell_known:
+                for i in range(len(Spell_List)):
+                    if spell == umlaute(Spell_List[i]['Name']).lower().replace(' ', ''):
+                        index = i
+                        break
+                cost = Spell_List[i]['AP-Verbrauch']
+                if "je" not in cost:
+                    await message.channel.send('Der Zauber hat keine variablen AP Kosten. Wiederhole den Befehl ohne Anzahl.')
+                    AP_Kosten = 0
+                else:
+                    AP_Kosten = int(Spell_List[index]['AP-Verbrauch'][:1]) * int(amounts[0])
+                    if AP_Kosten > int(Current_Property_Set[16]['Wert']):
+                        await message.channel.send('Du hast nicht genügend AP um diesen Zauber zu wirken!')
+                        AP_Kosten = 0
+                    else:
+                        Roll = random.randint(1,20)
+                        if Roll == 1:
+                            Effekt = random.randint(1,100)
+                            output = '**Der Zauber ist ein kritischer Misserfolg!** Nebeneffekt: ' + str(Effekt)
+                            for i in range(len(Crit_Fails_Spells)):
+                                if int(Crit_Fails_Spells[i]['Wert']) <= Effekt:
+                                    Effekt_Ausgabe = umlaute(Crit_Fails_Spells[i]['Effekt'])
+                                else:
+                                    break
+                            if Effekt > 10 and Effekt < 31:
+                                x = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('1W6', ('**' + str(x) + '** (1W6)'))
+                            elif Effekt > 30 and Effekt < 51:
+                                AP_Kosten = AP_Kosten*2
+                            elif Effekt > 70 and Effekt < 81:
+                                x = random.randint(1, 6)
+                                y = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('1W6 AP', ('**' + str(x) + '** (1W6) AP'))
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('kann 1W6', ('kann **' + str(y) + '** (1W6)'))
+                                AP_Kosten += x
+                            elif Effekt > 90 and Effekt < 96:
+                                x = random.randint(1, 6)
+                                y = random.randint(1, 6)
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('dadurch 1W6', ('dadurch **' + str(x) + '** (1W6)'))
+                                Effekt_Ausgabe = Effekt_Ausgabe.replace('nach 1W6', ('nach **' + str(y) + '** (1W6)'))
+                            await message.channel.send(output + '\n' + umlaute(Effekt_Ausgabe))
+                        elif Roll == 20:
+                            await message.channel.send('**Der Zauber ist ein kritischer Erfolg!**')
+                        else:
+                            bonus = 0
+                            if Spell_List[index]['Schule'] == Current_Property_Set[19]['Wert']:
+                                bonus += 2
+                            if Roll + bonus + int(Current_Ability_Set[62]['Wert']) >= 20:
+                                await message.channel.send('Der Zauber war erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+                            else:
+                                await message.channel.send('Der Zauber war nicht erfolgreich! ' + str(Roll + bonus + int(Current_Ability_Set[62]['Wert'])) + ' (**' + str(Roll) + '** + ' + str(bonus + int(Current_Ability_Set[62]['Wert'])) + ')')
+        if not AP_Kosten == 0:
+            if str(message.author) == 'Echtgeilman92#2052':
+                if int(Property_List_Cloi[16]['Wert']) - AP_Kosten < 0:
+                    Property_List_Cloi[16]['Wert'] = '0'
+                else:
+                    Property_List_Cloi[16]['Wert'] = str(int(Property_List_Cloi[16]['Wert']) - AP_Kosten)
+                await message.channel.send('Du bist nun bei ' + Property_List_Cloi[16]['Wert'] + ' AP')
+            if str(message.author) == 'Aelron#6030' or str(message.author) == 'Ponk#0213':
+                if int(Property_List_Cordovan[16]['Wert']) - AP_Kosten < 0:
+                    Property_List_Cordovan[16]['Wert'] = '0'
+                else:
+                    Property_List_Cordovan[16]['Wert'] = str(int(Property_List_Cordovan[16]['Wert']) - AP_Kosten)
+                await message.channel.send('Du bist nun bei ' + Property_List_Cordovan[16]['Wert'] + ' AP')
+            if str(message.author) == 'JohannesDberg#9702':
+                if int(Property_List_Leonidas[16]['Wert']) - AP_Kosten < 0:
+                    Property_List_Leonidas[16]['Wert'] = '0'
+                else:
+                    Property_List_Leonidas[16]['Wert'] = str(int(Property_List_Leonidas[16]['Wert']) - AP_Kosten)
+                    await message.channel.send('Du bist nun bei ' + Property_List_Leonidas[16]['Wert'] + ' AP')
+            if str(message.author) == 'Friedrich#6066':
+                if int(Property_List_Taravan[16]['Wert']) - AP_Kosten < 0:
+                    Property_List_Taravan[16]['Wert'] = '0'
+                else:
+                    Property_List_Taravan[16]['Wert'] = str(int(Property_List_Taravan[16]['Wert']) - AP_Kosten)
+                await message.channel.send('Du bist nun bei ' + Property_List_Taravan[16]['Wert'] + ' AP')
+            
 #Command handling direct damage dealt to any player. (Players can only inflict damage to self, while DM can inflict damage to any player.)
     elif message.content.startswith('!d. schaden'):
         try:
@@ -816,6 +855,23 @@ async def on_message(message):
         except:
             await message.channel.send('https://i.imgflip.com/3kk1hj.jpg')
 
+#Command for showing all the commands.
+    # elif message.content == '!commands':
+    #     await message.channel.send('h')
+
+#Command for playing youtube videos.
+    # elif message.content == '!play':
+    #     server = ctx.message.server
+    #     voice_client = client.voice_client_in(server)
+    #     player = await voice_client.create_ytdl_player(url)
+    #     players[server.id] = player
+    #     player.start()
+
+#Command for playing youtube videos.
+    # elif message.content == '!join' and DM_Status:
+    #     channel = message.author.voice.channel
+    #     await channel.connect()
+
 ###----------------------------------------------------
 #Commands for the DM to observe and controll gameplay
 ###----------------------------------------------------
@@ -1019,4 +1075,7 @@ async def on_message(message):
         except:
             await message.channel.send('Die Sonne will einfach nicht untergehen...')
 
-client.run('Njg5ODI4NjYwNTkyNjQwMTM1.XqXhNQ.u_UjhZ3tp8ukgvlHbxQkGVBTYxY')
+with open('Token/Discord_Token.txt', 'r') as file:
+    Token = file.read()
+players = {}
+client.run(Token)

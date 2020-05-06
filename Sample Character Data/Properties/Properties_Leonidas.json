@@ -13,9 +13,9 @@
 {"Eigenschaft": "Resistenzbonus Geist", "Wert": "1"},
 {"Eigenschaft": "Rüstung", "Wert": "2"},
 {"Eigenschaft": "Maximale LP", "Wert": "17"},
-{"Eigenschaft": "Momentane LP", "Wert": "8"},
+{"Eigenschaft": "Momentane LP", "Wert": "12"},
 {"Eigenschaft": "Maximale AP", "Wert": "46"},
-{"Eigenschaft": "Momentane AP", "Wert": "23"},
+{"Eigenschaft": "Momentane AP", "Wert": "46"},
 {"Eigenschaft": "Maximale Bewegungsweite", "Wert": "25"},
 {"Eigenschaft": "Momentane Bewegungsweite", "Wert": "25"},
 {"Eigenschaft": "Zauberspezialisierung", "Wert": "-"}
